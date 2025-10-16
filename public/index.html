@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mercurius — Chat de Vendas</title>
+  <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="centered">
+      <header class="app-header">
+        <h1>Mercurius</h1>
+        <p class="subtitle">Insights de vendas — Produtos Tech</p>
+      </header>
+
+      <section class="chat-card">
+        <div id="messages" class="messages" aria-live="polite"></div>
+
+        <div id="typing" class="typing" hidden>Mercurius está digitando...</div>
+
+        <form id="chatForm" class="composer" autocomplete="off">
+          <input id="input" type="text" placeholder="Pergunte sobre as vendas (ex.: vendas totais em julho)" />
+          <button type="submit">Enviar</button>
+        </form>
+      </section>
+
+      <footer class="footnote">Conectado ao Google Drive / Sheets • Respostas em português</footer>
+    </main>
+
+  <script src="app.js"></script>
+  </body>
+</html>

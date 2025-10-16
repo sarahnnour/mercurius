@@ -1,0 +1,241 @@
+:root {
+  --bg: #fafafa;
+  --muted: #f4f5f7;
+  --accent: #1a1a1a;
+  --accent-light: #2563eb;
+  --muted-text: #64748b;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --gradient: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+}
+
+* { box-sizing: border-box }
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+html, body, #root { 
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--accent);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+.centered {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem 0;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 600;
+  background: var(--gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent; /* fallback */
+  letter-spacing: -0.02em;
+}
+
+.app-header .subtitle {
+  margin: 0.5rem 0 0;
+  color: var(--muted-text);
+  font-size: 1rem;
+  font-weight: 500;
+}
+.chat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 12px 36px var(--shadow);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.messages {
+  min-height: 400px;
+  max-height: 70vh;
+  overflow: auto;
+  padding: 1rem;
+  scroll-behavior: smooth;
+  flex: 1;
+}
+
+.message {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.bubble {
+  max-width: 80%;
+  padding: 1rem 1.5rem;
+  border-radius: 18px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.bubble:hover {
+  transform: translateY(-1px);
+}
+
+.bubble.user {
+  background: var(--gradient);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.bubble.bot {
+  background: var(--card);
+  color: var(--accent);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+
+.composer {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.composer input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  background: transparent;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  color: var(--accent);
+}
+
+.composer input:focus {
+  outline: none;
+  border-color: var(--accent-light);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.composer button {
+  padding: 1rem 2rem;
+  border-radius: 16px;
+  border: 0;
+  background: var(--gradient);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.composer button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.composer button:active {
+  transform: translateY(0);
+}
+
+.typing {
+  font-size: 0.9rem;
+  color: var(--muted-text);
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  background: var(--muted);
+  border-radius: 12px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.footnote {
+  text-align: center;
+  color: var(--muted-text);
+  font-size: 0.85rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  opacity: 0.8;
+}
+
+/* Scrollbar customization */
+.messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-text);
+}
+
+@media (max-width: 768px) {
+  .centered {
+    padding: 1rem;
+    margin: 0;
+  }
+
+  .chat-card {
+    padding: 1rem;
+    border-radius: 20px;
+  }
+
+  .messages {
+    min-height: 350px;
+  }
+
+  .bubble {
+    max-width: 85%;
+  }
+
+  .app-header h1 {
+    font-size: 2rem;
+  }
+}
