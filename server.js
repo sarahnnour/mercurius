@@ -1,12 +1,18 @@
 // Servidor Express básico que fornece endpoints pra listar arquivos e responder perguntas
+require('dotenv').config();
+
+// LOG DE DEBUG - REMOVER DEPOIS
+console.log('=== DEBUG ENV ===');
+console.log('GEMINI_API_KEY:', process.env.GEMINI_API_KEY ? 'DEFINIDA ✓' : 'NÃO DEFINIDA ✗');
+console.log('GDRIVE_FOLDER_ID:', process.env.GDRIVE_FOLDER_ID ? 'DEFINIDA ✓' : 'NÃO DEFINIDA ✗');
+console.log('================');
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { listFilesInFolder, readSheet } = require('./src/googleClient');
 const { askGemini } = require('./src/geminiClient');
-
-require('dotenv').config();
 
 const app = express();
 app.use(cors());
