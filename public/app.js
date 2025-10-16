@@ -1,11 +1,11 @@
-// App frontend logic: envia perguntas ao backend e renderiza respostas
+// Lógica do frontend: manda as perguntas pro backend e mostra as respostas na tela
 const messagesEl = document.getElementById('messages');
 const form = document.getElementById('chatForm');
 const input = document.getElementById('input');
 const typingEl = document.getElementById('typing');
 const rootEl = document.querySelector('main.centered');
 
-// show error banner if static assets not loaded correctly
+// Mostra uma faixa de aviso ou erro no topo da tela
 function showBanner(message, type = 'error'){
   let b = document.getElementById('app-banner');
   if(!b){
@@ -65,10 +65,10 @@ form.addEventListener('submit', e =>{
   queryServer(q);
 });
 
-// Welcome message
+// Mensagem inicial quando abre o app
 appendMessage('Olá! Pergunte sobre as vendas mensais, produtos mais vendidos, comparações e insights.', 'bot');
 
-// On load: quick diagnostic to /api/files to ensure backend + Google Client estão funcionando
+// Quando carrega a página, testa se o backend tá funcionando
 window.addEventListener('load', async ()=>{
   try{
     const res = await fetch('/api/files');

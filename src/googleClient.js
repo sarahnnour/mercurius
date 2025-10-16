@@ -5,7 +5,7 @@ const path = require('path');
 let authClient;
 function getAuth(){
   if(authClient) return authClient;
-  console.log('GoogleClient: server time =>', new Date().toISOString());
+  console.log('Log da hora que iniciou:', new Date().toISOString());
   const credPath = path.join(__dirname, '..', 'credentials.json');
   if(!fs.existsSync(credPath)) throw new Error('Arquivo credentials.json não encontrado. Cole o JSON da service account em credentials.json na raiz do projeto.');
   const key = require(credPath);

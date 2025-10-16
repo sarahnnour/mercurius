@@ -3,20 +3,18 @@ const axios = require('axios');
 // Pega a chave da API das variáveis de ambiente
 const GEMINI_KEY = process.env.GEMINI_API_KEY || '';
 
-/**
- * Pergunta ao modelo Gemini (Google Generative Language API).
- * Requer a variável de ambiente GEMINI_API_KEY com uma API key válida.
- */
+// Função que manda a pergunta pro modelo Gemini
+// Precisa da chave da API configurada na variável GEMINI_API_KEY
 async function askGemini(prompt) {
-  // Se a chave da API não for encontrada, retorna uma resposta de demonstração
+  // Se não tiver chave configurada, só retorna uma mensagem de exemplo
   if (!GEMINI_KEY) {
     return `(Resposta de demonstração) A chave da API do Gemini não foi configurada. Pergunta recebida: ${prompt.slice(0, 200)}`;
   }
 
-  // CORREÇÃO: Usando o nome exato do modelo para a API REST.
+  // Uso o modelo mais rápido do Gemini
   const model = 'gemini-1.5-flash';
 
-  // URL correta para o endpoint v1beta dos modelos Gemini
+  // Endpoint da API do Gemini
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_KEY}`;
 
   try {

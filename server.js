@@ -1,4 +1,4 @@
-// Simple Express server providing endpoints to list files and answer queries.
+// Servidor Express básico que fornece endpoints pra listar arquivos e responder perguntas
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -24,7 +24,7 @@ app.get('/api/files', async (req, res) =>{
   }
 });
 
-// Endpoint de diagnóstico (seguro): informa se env vars e credentials foram carregados
+// Rota de debug pra ver se tá tudo certinho com as variáveis de ambiente e credenciais
 app.get('/api/debug', (req, res) =>{
   const fs = require('fs');
   const path = require('path');
@@ -40,7 +40,7 @@ app.get('/api/debug', (req, res) =>{
   });
 });
 
-// Rota solicitada: lista Planilhas Google em uma pasta (usa credentials.json)
+// Endpoint pra listar as planilhas do Google Drive da pasta configurada
 app.get('/api/drive-files', async (req, res) => {
   const { google } = require('googleapis');
   const fs = require('fs');
@@ -53,7 +53,7 @@ app.get('/api/drive-files', async (req, res) => {
     }
     const key = require(credPath);
 
-    // Autenticação usando service account (credentials.json)
+    // Faz autenticação com a conta de serviço que configurei no credentials.json
     const auth = new google.auth.GoogleAuth({
       credentials: key,
       scopes: ['https://www.googleapis.com/auth/drive.readonly']
@@ -61,16 +61,16 @@ app.get('/api/drive-files', async (req, res) => {
 
     const drive = google.drive({ version: 'v3', auth });
 
-    // ID da pasta placeholder conforme solicitado
+    // ID da pasta do Google Drive onde estão minhas planilhas
     const folderId = '1TGow6q7-0Itc5ktBEGzkkb81wo5LpkD-';
 
-    // Query: arquivos na pasta que sejam Google Spreadsheets
+    // Busca só as planilhas da pasta (ignora outros tipos de arquivo)
     const response = await drive.files.list({
       q: `'${folderId}' in parents and mimeType = 'application/vnd.google-apps.spreadsheet' and trashed = false`,
       fields: 'files(id,name)'
     });
 
-    // Debug: imprime a resposta completa da API do Google Drive para diagnóstico
+    // Pra debugar depois se precisar
     console.log('Resposta completa da API do Google:', response.data);
 
     const files = (response.data && response.data.files) ? response.data.files.map(f => ({ id: f.id, name: f.name })) : [];
@@ -93,11 +93,9 @@ app.post('/api/query', async (req, res) =>{
   });
 
   try{
-    // Example flow: list files, read sheets, aggregate minimal data, forward to Gemini
     const files = await listFilesInFolder(process.env.GDRIVE_FOLDER_ID);
     console.log('Debug /api/query: encontradas', files.length, 'planilhas');
     
-    // For demo, read first sheet if any
     let sheetsData = [];
     if(files.length){
       const first = files[0];
@@ -107,8 +105,7 @@ app.post('/api/query', async (req, res) =>{
         console.log('Debug /api/query: lida planilha', first.name, 'com', data?.length || 0, 'linhas');
       }catch(e){ console.warn('Não foi possível ler a planilha', e.message) }
     }
-
-    // Build a prompt: include small sample of sheet data and the user question
+    
     const prompt = `Dados: ${JSON.stringify(sheetsData).slice(0,4000)}\n\nPergunta: ${question} (responda em português)`;
     const answer = await askGemini(prompt);
     res.json({ answer });
