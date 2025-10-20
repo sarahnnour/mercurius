@@ -2,14 +2,26 @@
 <html lang="pt-br">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mercurius — AI Sales Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Mercurius - Chatbot de análise de dados de vendas com IA" />
+    <title>Mercurius – AI Sales Analytics</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <!-- Botão de menu hambúrguer (mobile) -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Overlay para fechar sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="app-container">
       <!-- Sidebar Esquerda -->
-      <aside class="sidebar">
+      <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
           <h1 class="logo">Mercurius</h1>
           <p class="logo-subtitle">AI Analytics</p>
@@ -65,7 +77,7 @@
             placeholder="faça sua pergunta..." 
             spellcheck="false"
           />
-          <button type="submit" class="send-btn">
+          <button type="submit" class="send-btn" aria-label="Enviar mensagem">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

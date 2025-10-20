@@ -4,15 +4,47 @@ const input = document.getElementById('input');
 const typingEl = document.getElementById('typing');
 const fileInput = document.getElementById('fileInput');
 const filesList = document.getElementById('filesList');
+const menuToggle = document.getElementById('menuToggle');
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+// Controle do menu mobile
+function toggleSidebar() {
+  sidebar.classList.toggle('open');
+  sidebarOverlay.classList.toggle('active');
+  menuToggle.classList.toggle('active');
+}
+
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('active');
+  menuToggle.classList.remove('active');
+}
+
+// Event listeners para o menu
+menuToggle.addEventListener('click', toggleSidebar);
+sidebarOverlay.addEventListener('click', closeSidebar);
+
+// Fecha sidebar ao clicar em um arquivo (mobile)
+document.addEventListener('click', (e) => {
+  if (window.innerWidth <= 768 && e.target.closest('.file-item')) {
+    setTimeout(closeSidebar, 300);
+  }
+});
+
+// Fecha sidebar ao redimensionar para desktop
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) {
+    closeSidebar();
+  }
+});
 
 function showBanner(message, type = 'error') {
-  // Remove banner antigo se existir
   let b = document.getElementById('app-banner');
   if (b) {
     b.remove();
   }
   
-  // Cria novo banner
   b = document.createElement('div');
   b.id = 'app-banner';
   b.style.cssText = `
@@ -42,6 +74,14 @@ function showBanner(message, type = 'error') {
     b.style.color = '#000000';
   }
   
+  // Ajuste para mobile
+  if (window.innerWidth <= 768) {
+    b.style.top = '4.5rem';
+    b.style.left = '1rem';
+    b.style.right = '1rem';
+    b.style.maxWidth = 'none';
+  }
+  
   document.body.appendChild(b);
   
   setTimeout(() => {
@@ -57,7 +97,6 @@ function appendMessage(text, sender = 'bot') {
   const bubble = document.createElement('div');
   bubble.className = `bubble ${sender === 'user' ? 'user' : 'bot'}`;
   
-  // Preserva quebras de linha e formatação
   bubble.style.whiteSpace = 'pre-wrap';
   bubble.textContent = text;
   
@@ -132,6 +171,11 @@ async function uploadFile(file) {
     
     await loadFilesList();
     appendMessage(`Arquivo "${data.file.name}" adicionado com sucesso! Agora você pode fazer perguntas sobre os dados.`, 'bot');
+    
+    // Fecha sidebar no mobile após upload bem-sucedido
+    if (window.innerWidth <= 768) {
+      setTimeout(closeSidebar, 800);
+    }
   } catch (err) {
     console.error('❌ Erro no upload:', err);
     showBanner('Erro ao enviar arquivo: ' + err.message, 'error');
@@ -166,16 +210,14 @@ fileInput.addEventListener('change', (e) => {
       console.log('📄 Processando:', file.name, 'Tamanho:', file.size, 'bytes');
       uploadFile(file);
     });
-    fileInput.value = ''; // Limpa o input
+    fileInput.value = '';
   }
 });
 
 async function queryServer(q) {
-  // Cria um timer para mostrar o indicador de "digitando"
-  // só se a resposta demorar mais de 500ms
   const typingTimer = setTimeout(() => {
     typingEl.hidden = false;
-  }, 500); // 500ms de "grace period"
+  }, 500);
 
   try {
     console.log('💬 Enviando pergunta:', q);
@@ -193,9 +235,7 @@ async function queryServer(q) {
 
     const data = await res.json().catch(() => null);
     
-    // Independentemente da resposta, limpamos o timer
     clearTimeout(typingTimer);
-    // E garantimos que o indicador está escondido
     typingEl.hidden = true;
 
     console.log('📨 Resposta recebida:', data);
@@ -208,9 +248,7 @@ async function queryServer(q) {
       appendMessage('Desculpe, não consegui gerar uma resposta.', 'bot');
     }
   } catch (err) {
-    // Se der erro, também limpamos o timer
     clearTimeout(typingTimer);
-    // E garantimos que o indicador está escondido
     typingEl.hidden = true;
     console.error('❌ Erro na consulta:', err);
     appendMessage('Erro: ' + (err.message || err), 'bot');
