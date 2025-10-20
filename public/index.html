@@ -3,30 +3,78 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mercurius — Chat de Vendas</title>
-  <link rel="stylesheet" href="styles.css">
+    <title>Mercurius — AI Sales Analytics</title>
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <main class="centered">
-      <header class="app-header">
-        <h1>Mercurius</h1>
-        <p class="subtitle">Insights de vendas — Produtos Tech</p>
-      </header>
+    <div class="app-container">
+      <!-- Sidebar Esquerda -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h1 class="logo">Mercurius</h1>
+          <p class="logo-subtitle">AI Analytics</p>
+        </div>
 
-      <section class="chat-card">
+        <div class="upload-zone">
+          <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display: none;" multiple />
+          <button onclick="document.getElementById('fileInput').click()" class="upload-trigger">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span>Upload Files</span>
+          </button>
+          <p class="upload-hint">Excel, CSV • Max 10MB</p>
+        </div>
+
+        <div class="files-container">
+          <h2 class="section-title">Data Sources</h2>
+          <div id="filesList" class="files-list"></div>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span class="status-text">AI Ready</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Área Principal do Chat -->
+      <main class="chat-container">
+        <div class="chat-header">
+          <div class="chat-title">
+            <h2>Conversa</h2>
+            <span class="chat-subtitle">Pergunte qualquer coisa sobre os seus dados</span>
+          </div>
+        </div>
+
         <div id="messages" class="messages" aria-live="polite"></div>
 
-        <div id="typing" class="typing" hidden>Mercurius está digitando...</div>
+        <div id="typing" class="typing" hidden>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+        </div>
 
-        <form id="chatForm" class="composer" autocomplete="off">
-          <input id="input" type="text" placeholder="Pergunte sobre as vendas (ex.: vendas totais em julho)" />
-          <button type="submit">Enviar</button>
+        <form id="chatForm" class="input-area" autocomplete="off">
+          <input 
+            id="input" 
+            type="text" 
+            placeholder="faça sua pergunta..." 
+            spellcheck="false"
+          />
+          <button type="submit" class="send-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </form>
-      </section>
+      </main>
+    </div>
 
-      <footer class="footnote">Conectado ao Google Drive / Sheets • Respostas em português</footer>
-    </main>
-
-  <script src="app.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>
