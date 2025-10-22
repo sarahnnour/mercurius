@@ -125,34 +125,33 @@ app.post('/api/query', async (req, res) => {
       });
     }
     
-    // Prepara os dados de todas as planilhas para o contexto
+    // Prepara os dados de todas as planilhas para o contexto - SEM LIMITAÇÃO
     const sheetsContext = uploadedSheets.map(sheet => {
-      // Limita o número de linhas para não exceder o limite de tokens
-      const maxRows = 100;
-      const limitedData = sheet.data.slice(0, maxRows);
-      
       return {
         name: sheet.name,
-        headers: limitedData[0] || [],
-        rows: limitedData.length,
-        sample: limitedData.slice(0, 10) // Apenas 10 primeiras linhas como exemplo
+        headers: sheet.data[0] || [],
+        totalRows: sheet.data.length,
+        data: sheet.data // TODOS os dados da planilha
       };
     });
     
-    const prompt = `Você é um assistente especializado em análise de dados de vendas.
+    const prompt = `Você é um assistente especializado em análise de dados de vendas e suporte técnico.
 
-Dados das planilhas disponíveis:
+Dados completos das planilhas disponíveis:
 ${JSON.stringify(sheetsContext, null, 2)}
 
 Pergunta do usuário: ${question}
 
 Instruções:
-- Analise os dados fornecidos
+- Analise TODOS os dados fornecidos
+- A primeira linha contém os cabeçalhos das colunas
 - Responda em português de forma clara e objetiva
 - Se precisar fazer cálculos, mostre os resultados
 - Se os dados não forem suficientes para responder, informe isso
 - Forneça insights relevantes quando apropriado
 - Escreva de uma maneira clara graficamente, usando espaço, tópicos e não escrevendo textos longos em monobloco
+- Seja preciso com números e contagens
+
 Resposta:`;
 
     const answer = await askGemini(prompt);
